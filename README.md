@@ -1,19 +1,21 @@
 # Introduction
 
 
-### Confluence link
+### Links
 
-The confluence is https://confluence.cern.ch/display/IC/Topology+and+Non-linear+Matching%3A+from+KAM+Tori+to+Beam+profiles
+- Confluence [link](https://confluence.cern.ch/display/IC/Topology+and+Non-linear+Matching%3A+from+KAM+Tori+to+Beam+profiles).
+
+- Overleaf [link]()
 
 ### The questions and the quest
 
-This paper aims to address the following main questions, typical of the beam distribution matching between a transfer line and a circular machine (e.g. the injection in the Large Hadron Collider),
+This paper aims to study the beam distribution matching and its generalization to non-linear periodic lattices. For this aims we will use the topological approach as presented in P. Bélanger PhD.
 
-1. Given an initial $\rho(x,p)$ at N=0 and the positio s_0 and a KAM topology at the same position $s_0$, find the $lim_N\rho_N$
+The  logic flow of the paper has as skeleton the following questions:
 
+1. Given an initial $\rho(\vec{x},\vec{p})$ (at the turn N=0 and position $s_0$) and a KAM topology of the phase space {$\vec{x},\vec{p}$} at the same position $s_0$, find the $lim_N\rho$.
 
-2. Given a KAM topology and a beam profile (e.g. in 2D the x-profile or in 4D the x-y profile, etc), find the $\rho(x,p)$ that is matched.
-
+2. Given a KAM topology of the phase space {$\vec{x},\vec{p}$} and a beam $\vec{x}$-profile $\rho_\vec{x}=\int{\rho(\vec{x},\vec{p})}d\vec{p}$, find the corresponding $\rho(\vec{x},\vec{p})$ profile.
 
 3. If the $\rho$ is matched in s_0, is it matched along the full circular machine. Is the $\rho$ constant but for metric factors along the machine? In others words, $\rho|s_1=\rho(a\odot x, b \odot p)|s_0 $? Clearly not. Is the $\rho$_x constant but for metric factors along the machine?
 
