@@ -31,28 +31,42 @@ In the case of linear systems, the aforementioned questions are trivial.
 In general, the 1 cannot be answered. In fact the limit does not exist (oscillatory functions). A 2D example: if we start from a $\rho$ not matched to the topology, it will start to oscillate. Nevertheless we can dig more in the details of this  example because the approach can be naturally extended to the NL case.
 Let us assume to know in $s_0$ the topology of the 2D linear phase space. In other words that we know the two phasors that determine the ellipses $\Psi(J, \theta)$. If $\rho$ is not $\theta$-constant in $\Psi$ for each $J$, then the distribution is mismatched and the x-profile, $\rho_x$, oscillates indefinitely as function of the turn number $N$.
 
-Let's assume to have a 2D annular beam, i.e.~$\rho$ is constant with $r_{min}<\sqrt{x^2+p_x^2}<r_{max}$. Let's then assume that the topology can be expressed with the tori $\Psi(J, \theta)$=$(1+j) \sqrt{J} e^(j 2\pi \theta)+ j \sqrt{J}  \ e^(-j 2\pi \theta)$.
+Let's assume to have a 2D annular beam, i.e. $\rho$ is constant with $r_{min}<\sqrt{x^2+p_x^2}<r_{max}$. Let's then assume that the topology can be expressed with the tori $\Psi(J, \theta_x)=(1+j) \sqrt{J} e^{j 2\pi \theta}+ j \sqrt{J}  \ e^{-j 2\pi \theta_x}$ where $j$ is the imaginary unit.
 
-::: TODO
-Is it correct the J dependence?
-:::
+```diff
+- is OK to express in action?
+- verify the J dependence.
+```
 
- For each $x$ we can *numerically* evaluate the $\theta$-averaged $\rho$ and this will give the new distribution $<\rho>_N$, that is
+ For each $x$ we can *numerically* evaluate the $\theta_x$-averaged $\rho$ and this will give the new distribution
 
+$$
 \begin{equation}
-<\rho>_N (J)= 
+<\rho>_N (J_x)= \frac{1}{2\pi}\int_0^{2\pi} \rho(\Psi(J, \theta_x))d\theta_x.
 \end{equation}
+$$
 
-The very same approach hold for a non-linear problem, but this time since the tune will be amplitude dependent, the limit of 1 exists.
-
-And in 4D? Conceptually,the approach is the same as for the 2D  linear and non-linear case. Clearly the numerical averaging is more involved, since for all x, y we should average in $\theta_x$, $\theta_y$ (and similarly for 6D).
-
-As an example we can assume a 4D annular beam, that is $\rho$ constant in $r_{min}<\sqrt{x^2+p_x^2+y^2+y_p^2}<r_{max}$ [TODO EXAMPLE]. In a coupled linear lattice we can compute the average $<\rho>_N$ and compute the x-y projection.
-
-Is this projection ""
+To do this integral we just need to track a simple ensemble of particle {($x_i$,$p_x$=0)}.  We can associate a torus to each $x_i$, that is a set of (x, p_x) coordinates corresponding to a regular $\theta$-mesh in the interval [0, 2$\pi$). Then we map the density $rho$ on this set and compute the average.
+We associate to the set of the (x, p_x) coordinates the new average value.
 
 
+The very same approach hold for a non-linear problem, but this time since the tune will be amplitude dependent, the limit exists.
 
+```diff
+- Example of a 2D Hénon map.
+```
+
+And in 4D? Conceptually, the approach is the same as for the 2D case. Clearly the numerical averaging is more involved, since for all {($x_i,p_x=0,y_i,p_y=0$)} we should mesh and average in $\theta_x$, $\theta_y$ (and similarly for 6D).
+
+As an example we can assume a 4D annular beam, that is $\rho$ constant in $r_{min}<\sqrt{x^2+p_x^2+y^2+y_p^2}<r_{max}$. In a linear and coupled lattice we can compute the average $<\rho>_N$ and compute the x-y projection.
+
+```diff
+- Example of a FODO a skew-quad bump. Show how the $\rho_{\vec{x}}$ varies along the machine. Discussion on the "emittance exchange"?
+
+- Show a lattice 4D e.g. injection of the LHC with strong octupoles. Try to play with tune and octupoles current to moderately deform the KAM up 4-5 sigma. Inject a 4D gaussian beam linearly matched. Compute the limit of 1. Compare with tracking.
+```
+
+We can now move to the second question: we have the projected profile $\rho_{\vec{x}}$ and we would like to obtain the matched  $\rho$ given the NL topology (KAM hypothesis). In the linear case, we can address this question by the inverse Abel transform.
 
 
 
