@@ -5,7 +5,6 @@
 
 - Confluence [link](https://confluence.cern.ch/display/IC/Topology+and+Non-linear+Matching%3A+from+KAM+Tori+to+Beam+profiles).
 
-- Overleaf [link]()
 
 ### The questions and the quest
 
@@ -13,9 +12,9 @@ This paper aims to study the beam distribution matching and its generalization t
 
 The  logic flow of the paper has as skeleton the following questions:
 
-1. Given an initial $\rho(\vec{x},\vec{p})$ (at the turn N=0 and position $s_0$) and a KAM topology of the phase space {$\vec{x},\vec{p}$} at the same position $s_0$, find the $lim_N\rho$.
+1. Given an initial $\rho(\vec{x},\vec{p})$ (at the turn N=0 and position $s_0$) and a KAM topology of the phase space $\{\vec{x},\vec{p}\}$ at the same position $s_0$, find the $lim_N\rho$.
 
-2. Given a KAM topology of the phase space {$\vec{x},\vec{p}$} and a beam $\vec{x}$-profile $\rho_{\vec{x}}=\int\rho(\vec{x},\vec{p})d\vec{p}$, find the corresponding $\rho(\vec{x},\vec{p})$ profile.
+2. Given a KAM topology of the phase space $\{\vec{x},\vec{p}\}$ and a beam $\vec{x}$-profile $\rho_{\vec{x}}=\int\rho(\vec{x},\vec{p})d\vec{p}$, find the corresponding $\rho(\vec{x},\vec{p})$ profile.
 
 3. If the $\rho$ is matched in $s_0$, it is matched along the full NL circular machine.  Let's assume linear machines. Is the $\rho$ constant but for metric factors along the machine? In others words, is $\rho|s_1=\rho(a\odot x, b \odot p)|s_0 $? Clearly not (example: Gaussian beam with $\alpha_{CS}=0$ and $\alpha_{CS}\ne 0$). Is $\rho_{\vec{x}}$ constant but for metric factors along the machine?
 
@@ -35,7 +34,7 @@ Let's assume to have a 2D annular beam, i.e. $\rho$ is constant with $r_{min}<\s
 
 ```diff
 - is OK to express in action?
-- verify the J dependence.
+- verify the J dependence. I put a place-holder, I think I can use the expression of the phasors from Philippe's thesis (2D and 4D).
 ```
 
  For each $x$ we can *numerically* evaluate the $\theta_x$-averaged $\rho$ and this will give the new distribution
@@ -70,8 +69,4 @@ We can now move to the second question: we have the projected profile $\rho_{\ve
 
 Here I think the key is the projection of the tori on the x-y plane. A single point in x,y belongs to infinite tori and a single torus projects in infinite x-y points with different `multiplicity (crossing)'. The solutions is to define a list of tori; for each torus define its domain of projection with multiplicity.
 
-Starting from a mesh in x-y we can compute the ``layers'' of each single torus on this mesh. The xy projection is the linear combination of all layers. The coefficient of this linear combination are the unknown to find (e.g., via least square methods). 
-
-
-
-
+Starting from a mesh in x-y we can compute the ``layers'' of each single torus on this mesh. The xy projection is the linear combination of all layers. The coefficient of this linear combination are the unknown to find (e.g., via least square minimization). 
