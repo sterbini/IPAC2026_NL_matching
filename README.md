@@ -68,11 +68,10 @@ As an example we can assume a 4D annular beam, that is $\rho$ constant in $r_{mi
 
 We can now move to the second question: we have the projected profile $\rho_{\vec{x}}$ and we would like to obtain the matched  $\rho$ given the NL topology (KAM hypothesis). In the linear case, we can address this question by the inverse Abel transform. For the non-linear case we can get inspired by longitudinal tomography, LT (with all the differences between the two cases: LT solve the 2D phase space distribution from initial distribution from longitudinal time-varying profile. Here we want to focuse on steady state projection in >2D case). The 2D NL case can be dealt with the scraping method ``à la Kostas''. 
 
-```diff
 Here I think the key is the projection of the tori on the x-y plane. A single point in x,y belongs to infinite tori and a single torus projects in infinite x-y points with different `multiplicity (crossing)'. The solutions is to define a list of tori; for each torus define its domain of projection with multiplicity.
 
 Starting from a mesh in x-y we can compute the ``layers'' of each single torus on this mesh. The xy projection is the linear combination of all layers. The coefficient of this linear combination are the unknown to find (e.g., via least square methods). 
-```
+
 
 
 
