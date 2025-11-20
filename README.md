@@ -1,9 +1,11 @@
-# Introduction
+# Topology and Non-linear Matching: from KAM Tori to Beam profiles
 
+In modern circular accelerators, beam mismatch at injection into non-linear lattices can play a crucial role for beam quality degradation. In this work, we explore the process of non-linear matching within the Kolmogorov–Arnold–Moser (KAM) quasi-periodic regime, focusing on how the intrinsic phase-space structure influences the evolution of initial beam distributions. Using a topological approach, we quantify how mismatched Gaussian beams can develop non-Gaussian tails when propagated through non-linear focusing elements, as a consequence of the underlying invariant tori. These results are relevant for the design and operation of high-intensity storage rings and colliders where beam-halo control is critical.
 
 ### Links
 
 - Confluence [link](https://confluence.cern.ch/display/IC/Topology+and+Non-linear+Matching%3A+from+KAM+Tori+to+Beam+profiles).
+
 
 
 ### The questions and the quest
@@ -76,3 +78,21 @@ We can now move to the second question: we have the projected profile $\rho_{\ve
 Here I think the key is the projection of the tori on the $x-y$ plane. A single point in $x-y$ belongs to infinite tori and a single torus projects in infinite $x-y$ points with different ``multiplicity (crossing)''. The solutions is to define a list of tori; for each torus define its domain of projection with multiplicity.
 
 Starting from a mesh in x-y we can compute the ``layers'' of each single torus on this mesh. The xy projection is the linear combination of all layers. The coefficient of this linear combination are the unknown to find (e.g., via least squares minimization). 
+
+```diff
+- The second question can be a good way to open the problem of non factorization, and more importantly, that to solve unambiguously the $\rho$ problem,  one needs to have the x-y projection and not the x and y projections separately. 
+```
+
+## A possible plan
+
+- Take a lattice, e.g. the LHC lattice at the injection and make it linear and uncoupled, track it 4D (since uncoupled is a 2D) using `xsuite`. Use `pytori` to find numerically a *dense* set of tori. Solve the annular distribution problem in 2D.
+
+- Linearly couple the lattice (4D) and repeat.
+
+- Switch ON sextupole and octupole to repeat the linera 4D with the annular distribution and or with a Guaussian.
+
+- Address the question 2 by matching the annular distribution to the 4D NL problems. Show that the distribution is matched, e.g. by applying the method of question 1 as sanity check. 
+
+```diff
+- Clearly the paper can be very long (or longer than the canonical 3 pages). Once can consider in a later stage to drop question 2.
+```
