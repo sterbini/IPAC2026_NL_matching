@@ -30,23 +30,29 @@ In the case of linear systems, the aforementioned questions are trivial.
 In general, the 1 cannot be answered. In fact the limit does not exist (oscillatory functions). A 2D example: if we start from a $\rho$ not matched to the topology, it will start to oscillate. Nevertheless we can dig more in the details of this  example because the approach can be naturally extended to the NL case.
 Let us assume to know in $s_0$ the topology of the 2D linear phase space. In other words that we know the two phasors that determine the ellipses $\Psi(J, \theta)$. If $\rho$ is not $\theta$-constant in $\Psi$ for each $J$, then the distribution is mismatched and the x-profile, $\rho_x$, oscillates indefinitely as function of the turn number $N$.
 
-Let's assume to have a 2D annular beam, i.e. $\rho$ is constant with $r_{min}<\sqrt{x^2+p_x^2}<r_{max}$. Let's then assume that the topology can be expressed with the tori $\Psi(J, \theta_x)=(1+j) \sqrt{J} e^{j 2\pi \theta}+ j \sqrt{J}  \ e^{-j 2\pi \theta_x}$ where $j$ is the imaginary unit.
+Let's assume to have a 2D annular beam, i.e. $\rho$ is constant with $r_{min}<\sqrt{x^2+p_x^2}<r_{max}$. Let's then assume that the topology can be expressed with the tori, from  Eq. 4.14 of Philippe's thesis (PBT),  
+
+$$
+\Psi(I_x, \theta_x)=\sqrt{2 I_x}(\lambda_x^+ e^{i \Theta_x}+    \lambda_x^- \ e^{-i \Theta_x})
+$$
+
+where $\lambda_x^{\pm}$ are defined following Eq. 4.43 of PBT.
+
 
 ```diff
-- is OK to express in action?
-- verify the J dependence. I put a place-holder, I think I can use the expression of the phasors from Philippe's thesis (2D and 4D).
+- is OK to express in action? Numerically I think is not a problem and probably is not confusin the reader.
 ```
 
- For each $x$ we can *numerically* evaluate the $\theta_x$-averaged $\rho$ and this will give the new distribution
+ For each $x$ we can *numerically* evaluate the $\Theta_x$-averaged $\rho$ and this will give the new distribution
 
 $$
 \begin{equation}
-<\rho>_N (J_x)= \frac{1}{2\pi}\int_0^{2\pi} \rho(\Psi(J, \theta_x))d\theta_x.
+<\rho>_N (I_x)= \frac{1}{2\pi}\int_0^{2\pi} \rho(\Psi(I_x, \Theta_x))d\Theta_x.
 \end{equation}
 $$
 
-To do this integral we just need to track a simple ensemble of particle {($x_i$,$p_x$=0)}.  We can associate a torus to each $x_i$, that is a set of (x, p_x) coordinates corresponding to a regular $\theta$-mesh in the interval [0, 2$\pi$). Then we map the density $rho$ on this set and compute the average.
-We associate to the set of the (x, p_x) coordinates the new average value.
+To do this integral we just need to track a simple ensemble of particle ($x_i$,$p_x$=0).  We can associate a torus to each $x_i$, that is a set of ($x, p_x$) coordinates corresponding to a regular $\Theta_x$-mesh in the interval [0, 2$\pi$). Then we map the density $\rho$ on this set and compute its average.
+We associate to the the torus (the set of ($x, p_x$) coordinates) the new average value. In doing so, for our $i$-tori, we build the  $<\rho>_N (I_x)$.
 
 
 The very same approach hold for a non-linear problem, but this time since the tune will be amplitude dependent, the limit exists.
@@ -67,6 +73,6 @@ As an example we can assume a 4D annular beam, that is $\rho$ constant in $r_{mi
 
 We can now move to the second question: we have the projected profile $\rho_{\vec{x}}$ and we would like to obtain the matched  $\rho$ given the NL topology (KAM hypothesis). In the linear case, we can address this question by the inverse Abel transform. For the non-linear case we can get inspired by longitudinal tomography, LT (with all the differences between the two cases: LT solve the 2D phase space distribution from initial distribution from longitudinal time-varying profile. Here we want to focuse on steady state projection in >2D case). The 2D NL case can be dealt with the scraping method ``à la Kostas''. 
 
-Here I think the key is the projection of the tori on the x-y plane. A single point in x,y belongs to infinite tori and a single torus projects in infinite x-y points with different `multiplicity (crossing)'. The solutions is to define a list of tori; for each torus define its domain of projection with multiplicity.
+Here I think the key is the projection of the tori on the $x-y$ plane. A single point in $x-y$ belongs to infinite tori and a single torus projects in infinite $x-y$ points with different ``multiplicity (crossing)''. The solutions is to define a list of tori; for each torus define its domain of projection with multiplicity.
 
-Starting from a mesh in x-y we can compute the ``layers'' of each single torus on this mesh. The xy projection is the linear combination of all layers. The coefficient of this linear combination are the unknown to find (e.g., via least square minimization). 
+Starting from a mesh in x-y we can compute the ``layers'' of each single torus on this mesh. The xy projection is the linear combination of all layers. The coefficient of this linear combination are the unknown to find (e.g., via least squares minimization). 
