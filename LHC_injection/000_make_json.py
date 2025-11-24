@@ -1,8 +1,8 @@
 # %%
 import xtrack as xt
-import numpy as np
 from cpymad.madx import Madx
 import matplotlib.pyplot as plt
+
 # %%
 
 mad = Madx()
@@ -12,10 +12,6 @@ mad = Madx()
 # in the local folder
 mad.input('''
 call, file='acc-models-lhc/scenarios/cycle/pp/ramp/0/model.madx';
-on_x1 = 0;
-on_x5 = 0;
-twiss,sequence=lhcb1,table=twiss_lhcb1;
-
 ''')
 
 # %%
@@ -29,8 +25,12 @@ line = xt.Line.from_madx_sequence(
 
 line.set_particle_ref('proton', p0c=0.450e12)
 
-# inspect with
+# you can inspect the knobs with
 # line.vars.get_table().show()
+# then
+# line.vars('kof.b1')._info()
+
+
 # flat machine
 line['on_sep1_h'] = 0
 line['on_sep2h'] = 0
@@ -58,9 +58,7 @@ line['cmis.b1'] = 0
 line['dqpx.b1_op'] = 5
 line['dqpy.b1_op'] = 5
 
-
 # set octupoles
-# line.vars('kof.b1')._info()
 line['kof.b1'] = 0
 line['kod.b1'] = 0
 
@@ -70,6 +68,5 @@ tw = line.twiss(method='4d')
 # %%
 plt.plot(tw.s, tw.betx, label='betx')
 # %%
-
 line.to_json('lhc_injection.json')
 # %%
