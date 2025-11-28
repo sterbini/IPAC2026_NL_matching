@@ -97,3 +97,10 @@ Starting from a mesh in x-y we can compute the ``layers'' of each single torus o
 ```diff
 - Clearly the paper can be very long (or longer than the canonical 3 pages). Once can consider in a later stage to drop question 2.
 ```
+
+### Weighted macro-particle representation
+
+The first step is to represente $\rho$ using a grid of weighted macroparticle. In 2D, the grid has to be chosen on the tori $J_x$ at regular $\theta_x$ intervals. It is to be noted that in gerneal the grid is not regular [TODO: improve the concept ot regularity]. Each macro-particle has to be the value in rho and weighted by the area of the corresponding mesh. We assume a non resonant KAM region around a single fixed point of multiplicity 1 (the closed orbit). In other words the mesh is homothetic to a polar grid (via a normal form) assuming same $J_x$ at $\theta_x$ intervals.
+
+
+
