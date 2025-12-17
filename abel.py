@@ -32,8 +32,8 @@ plt.ylim(0, 5)
 j_x =.025
 j_y =.025
 
-j_x =50
-j_y =50 
+j_x =11
+j_y =11 
 N = int(100000*np.sqrt(j_x)*np.sqrt(j_y))
 theta_x = np.random.uniform(0, 2*np.pi, N)
 theta_y = np.random.uniform(0, 2*np.pi, N)
@@ -72,3 +72,21 @@ ax.set_title('Phase Space Distribution (x-y) - 3D')
 
 # %%
 # then https://chatgpt.com/s/t_6939929fff3c81919ecdfd3554b59449
+
+import numpy as np
+from scipy.optimize import nnls
+
+
+# %%
+A = np.array([
+    [1.0, 0.0],
+    [1.0, 1.0],
+    [1.0, 2.0],
+    [1.0, 3.0]
+])
+y = np.array([1.0, 2.0, 2.5, 3.5])
+
+x_nnls, rnorm = nnls(A, y)
+print("Non-negative x:", x_nnls)
+print("Residual norm:", rnorm)
+# %%

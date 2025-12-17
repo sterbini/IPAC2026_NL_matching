@@ -11,7 +11,7 @@ In modern circular accelerators, beam mismatch at injection into non-linear latt
 
 ### The questions and the quest
 
-This paper aims to study the beam distribution matching and its generalization to non-linear (NL) periodic lattices. For this aims we will use the topological approach as presented in P. Bélanger PhD.
+This paper aims to study the beam distribution matching and its generalization to non-linear (NL) periodic lattices. For this aims we will use the topological approach as presented in P. Bélanger's PhD.
 
 The  logic flow of the paper has as skeleton the following questions:
 
@@ -22,9 +22,9 @@ The  logic flow of the paper has as skeleton the following questions:
 3. If the $\rho$ is matched in $s_0$, it is matched along the full NL circular machine.  Let's assume linear machines. Is the $\rho$ constant but for metric factors along the machine? In others words, is $\rho|s_1=\rho(a\odot x, b \odot p)|s_0 $? Clearly not (example: Gaussian beam with $\alpha_{CS}=0$ and $\alpha_{CS}\ne 0$). Is $\rho_{\vec{x}}$ constant but for metric factors along the machine?
 
 
-The first problem is a problem on analysis, the second one is a problem of synthesis. The 3 is a corollary of 1 and 2.
+The first problem is a problem on analysis, the second one is a problem of synthesis. The third problem is a corollary of 1 and 2.
 
-To address this problem we assume that $\rho$ is zero outside the KAM region around the closed orbit.
+To address these questions we assume that $\rho$ is zero outside the KAM region around the closed orbit.
 
 ### Linear systems
 
