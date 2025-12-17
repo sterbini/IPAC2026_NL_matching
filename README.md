@@ -6,7 +6,7 @@ In modern circular accelerators, beam mismatch at injection into non-linear latt
 
 - Confluence [link](https://confluence.cern.ch/display/IC/Topology+and+Non-linear+Matching%3A+from+KAM+Tori+to+Beam+profiles).
 
-- We will use the [PhD thesis](https://cernbox.cern.ch/files/spaces/eos/user/s/sterbini/2025/Philippe%20Belanger/Philippe_Belanger_PhD_not_final.pdf) of Philippe and its [`pytori`](https://github.com/pbelange/pytori/tree/main) package.
+- We will use the [PhD thesis](https://cernbox.cern.ch/index.php/s/WwSqCYar5Y8HyZy) of P. Bélanger and its [`pytori`](https://github.com/pbelange/pytori/tree/main) package.
 
 
 ### The questions and the quest
