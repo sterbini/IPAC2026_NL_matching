@@ -262,10 +262,13 @@ plt.ylim(-0.43, 0.43)
 plt.xticks([-0.5, 0, 0.5])
 plt.yticks([-0.5, 0, 0.5])
 plt.savefig('../plots/henon_map_zoom.pdf', dpi=300, bbox_inches='tight')
+
 # %% same as above but with the external tori in red and the internal tori in gray
 plt.figure(figsize=(3, 3))
+plt.rcParams.update({'font.size': 11})
+
 for tracking in tracking_list[0:14]:
-    plt.plot(tracking['x'][0:200], tracking['px'][0:200], '.', color='gray', markersize=1)
+    plt.plot(tracking['x'][0:200], tracking['px'][0:200], '.', color='gray', markersize=1, alpha=.1)
 for tracking in tracking_list[14:15]:
     plt.plot(tracking['x'][0:200], tracking['px'][0:200], '.', color='red', markersize=1)
 plt.axis('equal')
@@ -384,13 +387,14 @@ plt.tight_layout()
 plt.savefig('../plots/harmonic_spectrum_torus14_annotated.pdf', dpi=300, bbox_inches='tight')
 plt.show()
 
-# %% Form the spectrum to the torus
+# %% From the spectrum to the torus
 Tx = np.linspace(0, 2 * np.pi, 30, endpoint=False)
 torus14 = tori[14]
 X  = torus14.X(Tx)
 PX = torus14.PX(Tx)
 
-fig, ax = plt.subplots(figsize=(3, 3))
+fig = plt.figure(figsize=(3, 3))  # same size as "same as above but with external tori in red"
+ax = fig.add_subplot(1, 1, 1)
 ax.fill(X, PX, color='C0', alpha=0.3)
 # Closed torus curve
 ax.plot(np.append(X, X[0]), np.append(PX, PX[0]), color='C0', lw=0.5)
@@ -423,20 +427,42 @@ ax.text(0.05, 0.95,
 
 ax.plot(0, 0, 'k+', ms=5)
 ax.set_aspect('equal')
+ax.set_xlim(-0.43, 0.43)
+ax.set_ylim(-0.43, 0.43)
+# set xticks and yticks  with -.4, -.2 0 2 .4
+plt.xticks([-0.4, -0.2, 0, 0.2, 0.4])
+plt.yticks([-0.4, -0.2, 0, 0.2, 0.4])
 ax.set_xlabel(r'$x\ [\sqrt{\mathrm{m}}]$')
 ax.set_ylabel(r'$p_x\ [\sqrt{\mathrm{m}}]$')
 plt.tight_layout()
 plt.savefig('../plots/torus14_area.pdf', dpi=300, bbox_inches='tight')
 plt.show()
 
+#%% plot the tracking result of the torus14 with the same size and axes limits as the previous plot
+fig, ax = plt.subplots(figsize=(3, 3))
+
+tracking = tracking_list[14]
+ax.plot(tracking['x'][0:200], tracking['px'][0:200], '.', color='k', markersize=1)
+# add in very light gray the tracking of the other tori
+for i, tracking in enumerate(tracking_list):
+    if i < 14:
+        ax.plot(tracking['x'][0:200], tracking['px'][0:200], '.', color='gray', markersize=1, alpha=0.1)
+ax.set_aspect('equal')
+ax.set_xlim(-0.43, 0.43)
+ax.set_ylim(-0.43, 0.43)
+ax.set_xlabel(r'$ x\ [\sqrt{\mathrm{m}}]$')
+ax.set_ylabel(r'$ p_x\ [\sqrt{\mathrm{m}}]$');
+plt.tight_layout()
+plt.savefig('../plots/torus14_tracking.pdf', dpi=300, bbox_inches='tight')
+
 # %%
 # Harmonic content for all tori: pcolormesh on a common frequency grid
 n_tori_plot = 15
-freq_bins = np.linspace(0, 0.5, 300)
+freq_bins = np.linspace(-0.5, 0.5, 600)
 Z = np.zeros((n_tori_plot, len(freq_bins) - 1))
 
 for i, tracking in enumerate(tracking_list[0:n_tori_plot]):
-    Qx = np.abs(tracking['Qx'])
+    Qx = tracking['Qx']
     Ax = np.abs(tracking['Ax'])
     for k in range(len(Qx)):
         bin_idx = np.searchsorted(freq_bins, Qx[k]) - 1
@@ -458,15 +484,28 @@ cmap.set_bad(alpha=0)
 fig, ax = plt.subplots(figsize=(8, 4))
 pcm = ax.pcolormesh(freq_bins, Ix_edges, Z_log, cmap=cmap, shading='flat')
 plt.colorbar(pcm, ax=ax, label=r'$\log_{10}|A_n|\ [\sqrt{\mathrm{m}}]$')
+ax.set_xlim(-0.5, 0.5)
 ax.set_xlabel('frequency [1/turn]')
 ax.set_ylabel(r'$I_x$ [m]')
+
+# Harmonic number labels at the top (using torus 14 as reference)
+ref = tracking_list[14]
+for k in range(len(ref['Qx'])):
+    n = ref['nx'][k][0]
+    f = ref['Qx'][k]
+    if np.abs(n) <= 15 and -0.5 <= f <= 0.5:
+        ax.text(f, 1.01, str(n), transform=ax.get_xaxis_transform(),
+                fontsize=5, ha='center', va='bottom', color='k')
+
 plt.tight_layout()
 plt.savefig('../plots/harmonic_map.pdf', dpi=300, bbox_inches='tight')
 plt.show()
+
+
 # %%
 # Reference dimension cell
 fig, ax = plt.subplots()
-
+torus= tori[14]
 max_terms_list = [3, 4, 5, 10, 50]
 
 colors = plt.cm.plasma(np.linspace(0.1, 0.9, len(max_terms_list)))
@@ -594,7 +633,7 @@ ax.set_ylabel(r'$ p_x\ [\sqrt{\mathrm{m}}]$')
 plt.tight_layout()
 plt.savefig('../plots/tori_mesh_highlight_ring12.pdf', dpi=600, bbox_inches='tight')
 
-# %%
+# %% Tori mesh: sweep all sectors for highlight_ring=12
 # # Tori mesh: sweep all sectors for highlight_ring=12
 # highlight_ring = 12
 
@@ -628,4 +667,923 @@ plt.savefig('../plots/tori_mesh_highlight_ring12.pdf', dpi=600, bbox_inches='tig
 #     plt.savefig(f'../plots/tori_mesh_ring{highlight_ring}_sector{j_highlight:03d}.pdf', dpi=600, bbox_inches='tight')
 #     plt.close()
 
+# %% Tori mesh: all slabs highlighted for sector theta=0
+j_highlight = 0
+fig, ax = plt.subplots()
+
+for i in range(n_rings):
+    color = peace_cmap(i / (n_rings - 1))
+    for j in range(n_angles):
+        j1 = (j + 1) % n_angles
+        alpha = 0.7 if j == j_highlight else 0.12
+        quad_x  = [X_mesh[i, j],  X_mesh[i, j1],  X_mesh[i+1, j1],  X_mesh[i+1, j]]
+        quad_px = [PX_mesh[i, j], PX_mesh[i, j1], PX_mesh[i+1, j1], PX_mesh[i+1, j]]
+        ax.fill(quad_x, quad_px, color=color, alpha=alpha, linewidth=0)
+
+# Rings on top
+for torus in tori_plot:
+    ptplt.xloop(torus, num_points=200, edgecolor='k', alpha=0.3, lw=0.8)
+
+# Spokes on top
+for j in range(n_angles):
+    ax.plot(X_mesh[:, j], PX_mesh[:, j], color='k', lw=0.5, alpha=0.15)
+
+ax.set_xlim(-0.43, 0.43)
+ax.set_ylim(-0.43, 0.43)
+ax.set_aspect('equal')
+ax.set_box_aspect(1)
+ax.set_xlabel(r'$ x\ [\sqrt{\mathrm{m}}]$')
+ax.set_ylabel(r'$ p_x\ [\sqrt{\mathrm{m}}]$')
+plt.tight_layout()
+plt.savefig(f'../plots/tori_mesh_all_rings_sector{j_highlight:03d}.pdf', dpi=600, bbox_inches='tight')
+plt.show()
+
+
+# %% Full mesh plot of tori foliation
+import numpy as np
+import matplotlib.pyplot as plt
+
+import nafflib
+import pytori as pt
+import pytori.plotting as ptplt
+
+# =======================
+# Mesh parameters
+#x_tori_number_ext = 200
+#x_tori_number_int = 50
+#x_tori_number = x_tori_number_ext + x_tori_number_int
+
+x_tori_number = 199
+x_start = np.linspace(0.00001,0.39,x_tori_number)
+# I_x_range = ((0.1*(1+1/x_tori_number_int))**2/2, 0.39**2/2) # Corresponding to x_start range via I = x^2/2
+# I_x_start = np.linspace(I_x_range[0], I_x_range[1], x_tori_number_ext)
+# x_start_int = np.linspace(0.0001, 0.1, x_tori_number_int)
+# x_start = np.concatenate([ x_start_int, np.sqrt(2 * I_x_start)])
+
+angular_points_number = 500
+# ======================
+
+# ========================
+# Henon parameters
+num_turns   = int(0.5e4)
+Q0          = 0.2071
+# ========================
+
+
+# Generating tori
+# px_start   = 0.37 * x_start
+px_start   = 0 * x_start
+tori    = []
+tracking_list = []
+
+for x0, px0 in zip(x_start, px_start):
+    # Iterating Henon map
+    x, px   = nafflib.henon_map(x0, px0, Q0, num_turns)
+
+    _tracking = {}
+    _tracking['x'] = x
+    _tracking['px'] = px
+    
+
+    # Extracting harmonics:
+    #============================================================================
+    n_harm  = 50
+    w_order = 4
+    Ax,Qx   = nafflib.harmonics(x,px,num_harmonics = n_harm,window_order=w_order)
+    #============================================================================
+
+    _tracking['Ax'] = Ax
+    _tracking['Qx'] = Qx
+    # Indexing harmonics
+    #============================================================================
+    max_n       = 90 #(high numbers needed in 2D..)
+    max_alias   = 50
+    warning_tol = np.inf #Disable warnings
+    Qvec    = [Qx[0]]
+    nx      = nafflib.linear_combinations(Qx,Qvec = Qvec,max_n=max_n,max_alias=max_alias,warning_tol=warning_tol)
+    
+    _tracking['nx'] = nx
+    #============================================================================
+
+    # Building torus (2D-torus)
+    #============================================================================
+    _torus = pt.Torus.from_naff(n=[nx],A=[Ax])
+    tori.append(_torus)
+    tracking_list.append(_tracking)
+
+    #============================================================================
+
+
+# Plotting
+#--------------------------------------------------
+
+# %%
+
+plt.figure()
+for torus in tori:
+    # Full loop around 0-2pi    
+    ptplt.xloop(torus,num_points=200,edgecolor='C0',alpha=0.7,lw=1)
+
+    # torus = torus.copy(max_terms=1)
+    # ptplt.xloop(torus,num_points=200,edgecolor='C0',alpha=0.7,lw=1)
+
+    # Free hand plot of the torus
+    Tx = np.linspace(0-np.pi/8,2*np.pi-np.pi/8,50) # Theta_x values
+    #plt.plot(torus.X(Tx), torus.PX(Tx),'-',color='C3',lw=1)
+    #plt.plot(torus.X(Tx[0]), torus.PX(Tx[0]),'o',color='C3',ms=3)
+    #plt.plot(torus.X(Tx[:-1]), torus.PX(Tx[:-1]),'-',color='C3',ms=3.5,alpha=0.2)
+
+
+
+
+plt.axis('equal')
+plt.gca().set_box_aspect(1) 
+plt.xlabel(r'$x\ [\sqrt{\mathrm{m}}]$');
+plt.ylabel(r'$p_x\ [\sqrt{\mathrm{m}}]$');
+
+# # plot an annulus from 0.1 to 0.3
+# annulus_inner = 0
+# annulus_outer = 0.33
+# theta = np.linspace(0, 2 * np.pi, angular_points_number)
+# # outer circle
+# x_outer = annulus_outer * np.cos(theta[::-1])
+# px_outer = annulus_outer * np.sin(theta[::-1])
+
+# # inner circle (reverse direction to make a proper closed annulus)
+# x_inner = annulus_inner * np.cos(theta)
+# px_inner = annulus_inner * np.sin(theta)
+  
+# plt.plot(x_inner, px_inner, 'g',lw=2,label='Inner Annulus')
+# plt.plot(x_outer, px_outer, 'g',lw=2,label='Outer Annulus')
+
+# x = np.concatenate([x_outer, x_inner])
+# y = np.concatenate([px_outer, px_inner])
+
+# plt.fill(x, y, color='orange', alpha=.1)
+plt.gca().set_aspect('equal')
+plt.savefig('../plots/tori_foliation_denser.pdf', dpi=300, bbox_inches='tight')
+# %%
+# %%
+# Harmonic content for all tori: pcolormesh on a common frequency grid
+plt.figure(figsize=(6, 6))
+n_tori_plot = x_tori_number
+freq_bins = np.linspace(-0.5, 0.5, 400)
+Z = np.zeros((n_tori_plot, len(freq_bins) - 1))
+
+for i, tracking in enumerate(tracking_list[0:n_tori_plot]):
+    Qx = tracking['Qx']
+    Ax = np.abs(tracking['Ax'])
+    for k in range(len(Qx)):
+        bin_idx = np.searchsorted(freq_bins, Qx[k]) - 1
+        if 0 <= bin_idx < Z.shape[1]:
+            if Ax[k] > Z[i, bin_idx]:
+                Z[i, bin_idx] = Ax[k]
+
+Z_log = np.where(Z > 1e-13, np.log10(Z), np.nan)
+
+Ix_values = np.array([tori[i].Ix for i in range(n_tori_plot)])
+dIx = np.diff(Ix_values)
+Ix_edges = np.concatenate([[Ix_values[0] - dIx[0] / 2],
+                            (Ix_values[:-1] + Ix_values[1:]) / 2,
+                            [Ix_values[-1] + dIx[-1] / 2]])
+
+cmap = plt.cm.plasma.copy()
+cmap.set_bad(alpha=0)
+
+fig, ax = plt.subplots(figsize=(6, 4))
+pcm = ax.pcolormesh(freq_bins, Ix_edges, Z_log, cmap=cmap, shading='flat')
+plt.colorbar(pcm, ax=ax, label=r'$\log_{10}|A_n|\ [\sqrt{\mathrm{m}}]$',
+             location='bottom', pad=0.15)
+ax.set_xlim(-0.5, 0.5)
+ax.set_xlabel('frequency [1/turn]')
+ax.set_ylabel(r'$I_x$ [m]')
+# Harmonic number labels at the top (using torus 14 as reference)
+# ref = tracking_list[14]
+# for k in range(len(ref['Qx'])):
+#     n = ref['nx'][k][0]
+#     f = ref['Qx'][k]
+#     if np.abs(n) <= 15 and -0.5 <= f <= 0.5:
+#         ax.text(f, 1.01, str(n), transform=ax.get_xaxis_transform(),
+#                 fontsize=5, ha='center', va='bottom', color='k')
+
+plt.tight_layout()
+plt.savefig('../plots/harmonic_map.pdf', dpi=300, bbox_inches='tight')
+plt.show()
+# %%
+
+plt.figure()
+for torus in tori:
+    # Full loop around 0-2pi    
+    ptplt.xloop(torus,num_points=200,edgecolor='C0',alpha=0.7,lw=1)
+
+    # torus = torus.copy(max_terms=1)
+    # ptplt.xloop(torus,num_points=200,edgecolor='C0',alpha=0.7,lw=1)
+
+    # Free hand plot of the torus
+    Tx = np.linspace(0-np.pi/8,2*np.pi-np.pi/8,50) # Theta_x values
+    #plt.plot(torus.X(Tx), torus.PX(Tx),'-',color='C3',lw=1)
+    #plt.plot(torus.X(Tx[0]), torus.PX(Tx[0]),'o',color='C3',ms=3)
+    #plt.plot(torus.X(Tx[:-1]), torus.PX(Tx[:-1]),'-',color='C3',ms=3.5,alpha=0.2)
+
+
+
+
+plt.axis('equal')
+plt.gca().set_box_aspect(1) 
+plt.xlabel(r'$x\ [\sqrt{\mathrm{m}}]$');
+plt.ylabel(r'$p_x\ [\sqrt{\mathrm{m}}]$');
+
+# plot an annulus from 0.1 to 0.3
+annulus_inner = 0
+annulus_outer = 0.33
+theta = np.linspace(0, 2 * np.pi, angular_points_number)
+# outer circle
+x_outer = annulus_outer * np.cos(theta[::-1])
+px_outer = annulus_outer * np.sin(theta[::-1])
+
+# inner circle (reverse direction to make a proper closed annulus)
+x_inner = annulus_inner * np.cos(theta)
+px_inner = annulus_inner * np.sin(theta)
+  
+plt.plot(x_inner, px_inner, 'g',lw=2,label='Inner Annulus')
+plt.plot(x_outer, px_outer, 'g',lw=2,label='Outer Annulus')
+
+x = np.concatenate([x_outer, x_inner])
+y = np.concatenate([px_outer, px_inner])
+
+plt.fill(x, y, color='orange', alpha=.1)
+plt.gca().set_aspect('equal')
+plt.savefig('../plots/tori_foliation_denser_and_distribution.pdf', dpi=300, bbox_inches='tight')
+plt.show()
+
+# %%
+
+import numpy as np
+
+def annulus(x, y, annulus_inner, annulus_outer):
+    # Convert to numpy arrays (no effect if they are already arrays)
+    x = np.asarray(x)
+    y = np.asarray(y)
+
+    r2 = x**2 + y**2
+    return np.where((annulus_inner**2 <= r2) & (r2 <= annulus_outer**2), 1, 0)
+
+def area_quadrilateral(x1, px1, x2, px2, x3, px3, x4, px4):
+    # split into two triangles
+    area1 = 0.5 * np.abs(x1*(px2 - px3) + x2*(px3 - px1) + x3*(px1 - px2))
+    area2 = 0.5 * np.abs(x1*(px3 - px4) + x3*(px4 - px1) + x4*(px1 - px3))
+    return area1 + area2 
+
+def annulus_weighted(Q, P, annulus_inner, annulus_outer):
+    """
+    Evaluate annulus membership and weight by distance between consecutive points.
+    
+    Parameters:
+    -----------
+    Q : np.array
+        Array of Q coordinates (shape: N)
+    P : np.array  
+        Array of P coordinates (shape: N)
+    annulus_inner : float
+        Inner radius of annulus
+    annulus_outer : float
+        Outer radius of annulus
+        
+    Returns:
+    --------
+    weights : np.array
+        Array of weights for each point. Points outside annulus get weight 0.
+        Points inside annulus get weight proportional to distance from previous point.
+    """
+    Q = np.asarray(Q)
+    P = np.asarray(P)
+    
+   
+    
+    # Binary mask for points in annulus
+    value = annulus(Q, P, annulus_inner, annulus_outer)
+    
+    
+    
+    # Calculate distances between consecutive points
+    area = 1
+    for ii in range(1,x_tori_number):
+        for jj in range(angular_points_number-1):
+            area = 1
+    #        area = 1 #area_quadrilateral(x[ii-1,jj-1], px[ii-1,jj-1],
+                        #   x[ii-1,jj], px[ii-1,jj],
+                        #   x[ii,jj], px[ii,jj],
+                        #   x[ii,jj-1], px[ii,jj-1]))
+    # Weight by distance, but only for points in annulus
+    weights = value * area
+    
+    return weights
+
+def gaussian_2d(x, y, sigma, truncation_sigma=3.0):
+    """
+    Isotropic 2D Gaussian evaluated at (x, y), truncated to 0 beyond
+    truncation_sigma * sigma.  Analogous to annulus() but returns a
+    continuous density value instead of a binary mask.
+
+    Parameters
+    ----------
+    x, y            : coordinates (scalar or array)
+    sigma           : Gaussian sigma [same units as x, y]
+    truncation_sigma: hard cut-off radius in units of sigma (default 3)
+    """
+    x = np.asarray(x)
+    y = np.asarray(y)
+    r2     = x**2 + y**2
+    r2_max = (truncation_sigma * sigma)**2
+    value  = np.exp(-r2 / (2.0 * sigma**2))
+    return np.where(r2 <= r2_max, value, 0.0)
+
+
+def gaussian_2d_weighted(Q, P, sigma, truncation_sigma=3.0):
+    """
+    Weight each mesh cell by the truncated 2D Gaussian density times the
+    cell area.  Analogous to the annulus inline loop, but for a Gaussian
+    distribution.
+
+    Parameters
+    ----------
+    Q, P             : mesh coordinate arrays, shape (x_tori_number, n_ang)
+    sigma            : Gaussian sigma
+    truncation_sigma : hard cut-off radius in units of sigma (default 3)
+
+    Returns
+    -------
+    weights_g : array of shape (x_tori_number, n_ang)
+    """
+    Q = np.asarray(Q)
+    P = np.asarray(P)
+    n_tori, n_ang = Q.shape
+    weights_g = np.zeros_like(Q)
+    for ii in range(1, n_tori):
+        for jj in range(n_ang):
+            value = gaussian_2d(Q[ii, jj], P[ii, jj], sigma, truncation_sigma)
+            area  = area_quadrilateral(
+                Q[ii-1, jj-1], P[ii-1, jj-1],
+                Q[ii-1, jj],   P[ii-1, jj],
+                Q[ii,   jj],   P[ii,   jj],
+                Q[ii,   jj-1], P[ii,   jj-1])
+            weights_g[ii, jj] = value * area
+    return weights_g
+
+
+my_Q = []
+my_P = []
+my_density = []
+my_average_density = []
+
+for torus in tori: 
+    looping = 'x'
+    Tx = np.linspace(0,2*np.pi,angular_points_number) 
+    Q = torus.X(Tx)
+    P = torus.PX(Tx)
+
+    my_Q.append(Q[:-1])
+    my_P.append(P[:-1])  
+    density = annulus_weighted(Q[:-1], P[:-1], annulus_inner, annulus_outer)
+    my_density.append(density)
+    average_density = np.mean(density)
+    my_average_density.append(average_density*np.ones_like(Q[:-1]))
+    
+# ── Mesh construction ──────────────────────────────────────────────────────
+my_Q = []
+my_P = []
+my_Q_p = []
+my_P_p = []
+my_Ix = []
+
+for torus in tori:
+    Tx = np.linspace(0, 2*np.pi, angular_points_number)
+    Q_t = torus.X(Tx)
+    P_t = torus.PX(Tx)
+    my_Q.append(Q_t[:-1])
+    my_P.append(P_t[:-1])
+    my_Q_p.append(Q_t[1:])
+    my_P_p.append(P_t[1:])
+    my_Ix.append(torus.Ix)
+
+Q = np.reshape(my_Q, (x_tori_number, angular_points_number-1))
+P = np.reshape(my_P, (x_tori_number, angular_points_number-1))
+Q_p = np.reshape(my_Q_p, (x_tori_number, angular_points_number-1))
+P_p = np.reshape(my_P_p, (x_tori_number, angular_points_number-1))
+# ── Annulus weights (binary mask × cell area) ──────────────────────────────
+weights = np.zeros_like(Q)
+values  = np.zeros_like(Q)
+
+for ii in range(1, x_tori_number):
+    for jj in range(angular_points_number-1):
+        #value = annulus(Q[ii, jj], P[ii, jj], annulus_inner, annulus_outer)
+        
+        value1 = annulus(Q[ii-1, jj-1], P[ii-1, jj-1], annulus_inner, annulus_outer)
+        value2 = annulus(Q[ii-1, jj], P[ii-1, jj], annulus_inner, annulus_outer)
+        value3 = annulus(Q[ii, jj], P[ii, jj], annulus_inner, annulus_outer)
+        value4 = annulus(Q[ii, jj-1], P[ii, jj-1], annulus_inner, annulus_outer)
+        value = (value1 + value2 + value3 + value4)/4
+
+        # area  = area_quadrilateral(Q[ii-1, jj-1], P[ii-1, jj-1],
+        #                            Q[ii-1, jj],   P[ii-1, jj],
+        #                            Q[ii,   jj],   P[ii,   jj],
+        #                            Q[ii,   jj-1], P[ii,   jj-1])
+        
+        area = (my_Ix[ii]-my_Ix[ii-1])*2*np.pi/angular_points_number
+        values[ii, jj]  = value
+        weights[ii, jj] = value * area
+
+# ── Plot ───────────────────────────────────────────────────────────────────
+from mpl_toolkits.axes_grid1 import make_axes_locatable
+
+fig, ax = plt.subplots(figsize=(6.4, 5.6))
+# sc = ax.scatter(Q, P, c=weights, cmap='viridis', marker='o', s=.1,
+#                 vmin=weights.min(), vmax=weights.max())
+sc = ax.scatter((Q+Q_p)/2, (P+P_p)/2, c=weights, cmap='viridis', marker='o', s=.1,
+                vmin=weights.min(), vmax=weights.max())
+ax.set_xlim(-0.43, 0.43)
+ax.set_ylim(-0.43, 0.43)
+ax.set_aspect('equal')
+ax.set_box_aspect(1)
+ax.set_xlabel(r'$ x\ [\sqrt{\mathrm{m}}]$')
+ax.set_ylabel(r'$ p_x\ [\sqrt{\mathrm{m}}]$')
+
+average_weights = np.mean(weights, axis=1)
+average_weights = np.repeat(average_weights[:, np.newaxis], angular_points_number-1, axis=1)
+
+divider = make_axes_locatable(ax)
+cax = divider.append_axes('bottom', size='5%', pad=0.5)
+cbar = fig.colorbar(sc, cax=cax, orientation='horizontal',
+                    label='weighted density [arb. units]',
+                    location='bottom', pad=0.15)
+cbar.set_ticks([weights.min(), weights.max()])
+cbar.set_ticklabels(['0', '1'])
+plt.tight_layout()
+plt.savefig('../plots/average_density.pdf', dpi=300, bbox_inches='tight')
+# %%
+fig, ax = plt.subplots(figsize=(6.4, 5.6))
+ax.scatter(my_Q, my_P, c=average_weights, cmap='viridis',  marker='o',vmin=weights.min(), vmax=weights.max(), s=.1)
+# plt.title('After filamentation')
+plt.xlabel(r'$x\ [\sqrt{\mathrm{m}}]$');
+plt.ylabel(r'$p_x\  [\sqrt{\mathrm{m}}]$')
+ax = plt.gca()
+ax.set_xlim(-0.43, 0.43)
+ax.set_ylim(-0.43, 0.43)
+ax.set_aspect('equal')
+ax.set_box_aspect(1)
+divider = make_axes_locatable(ax)
+cax = divider.append_axes('bottom', size='5%', pad=0.5)
+cbar = fig.colorbar(sc, cax=cax, orientation='horizontal',
+                    label='weighted density [arb. units]',
+                    location='bottom', pad=0.15)
+cbar.set_ticks([weights.min(), weights.max()])
+cbar.set_ticklabels(['0', '1'])
+plt.savefig('../plots/average_density_filamented.pdf', dpi=300, bbox_inches='tight')
+
+# %%
+
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Example arrays
+# X, Y, W are 1D arrays of the same length
+# X = ...
+# Y = ...
+# W = ...
+
+# Bin definitions
+my_Q_aux = np.concatenate(Q)
+my_P_aux = np.concatenate(P)
+my_average_density_aux = np.concatenate(average_weights)
+
+steps = 150
+xbins = np.linspace(min(my_Q_aux), max(my_Q_aux), steps)
+ybins = np.linspace(min(my_P_aux), max(my_P_aux), steps)
+
+# Build 2D weighted histogram
+H, xedges, yedges = np.histogram2d(my_Q_aux, my_P_aux, bins=[xbins, ybins], weights=my_average_density_aux)
+
+# Projection on X: sum over Y bins
+projXX = H.sum(axis=1)
+
+# Projection on Y: sum over X bins
+projYY = H.sum(axis=0)
+
+# Plot projections
+
+#plt.step(xedges[:-1], projXX, where='mid')
+
+
+my_Q_aux = np.concatenate(Q)
+my_P_aux = np.concatenate(P)
+my_density_aux = np.concatenate(weights)
+xbins = np.linspace(-0.45, 0.45, steps)
+ybins = np.linspace(-0.45, 0.45, steps)
+
+# Build 2D weighted histogram
+H, xedges, yedges = np.histogram2d(my_Q_aux, my_P_aux, bins=[xbins, ybins], weights=my_density_aux)
+
+# Projection on X: sum over Y bins
+projX = H.sum(axis=1)
+
+# Projection on Y: sum over X bins
+projY = H.sum(axis=0)
+
+rotations = [
+    (0,           r'$f_\infty$ at $s_0$'),
+    (np.pi/4,     r'$f_\infty$ at $s_0$ and $\mu_x=\pi/4$ '),
+    (np.pi/2,     r'$f_\infty$ at $s_0$ and $\mu_x=\pi/2$ '),
+    (3*np.pi/4,   r'$f_\infty$ at $s_0$ and $\mu_x=3\pi/4$ '),
+]
+proj_list = []
+for theta, label in rotations:
+    QQ = Q*np.cos(theta) - P*np.sin(theta)
+    PP = Q*np.sin(theta) + P*np.cos(theta)
+    H, xedges, _ = np.histogram2d(np.concatenate(QQ), np.concatenate(PP),
+                                   bins=[xbins, ybins], weights=my_average_density_aux, density=True)
+    proj_list.append((H.sum(axis=1), label))
+
+
+# Plot projections
+x_centers = xedges[1:]
+
+    
+# Abel transform of a uniform disk of radius annulus_outer
+R = annulus_outer
+x_abel = np.linspace(-0.5, 0.5, 1000)
+p_abel = 2 * np.sqrt(np.maximum(R**2 - x_abel**2, 0))
+# Normalise to the same integral as the filamented projection
+norm = np.trapezoid(proj_list[0][0], x_centers) / np.trapezoid(p_abel, x_abel)
+plt.plot(x_abel, p_abel * norm, 'k--', lw=1.5, label=r'$f_0$ (analytical)')
+
+for proj, label in proj_list[0:1]:
+    plt.step(x_centers, proj, where='mid', label='$f_\infty$ at $s_0$')
+
+plt.title("Projection on $x$-axis")
+plt.xlabel(r'$x\ [\sqrt{\mathrm{m}}]$')
+plt.ylabel("Weighted counts")
+
+plt.tight_layout()
+plt.grid()
+plt.legend()
+
+plt.xlabel(r'$x\ [\sqrt{\mathrm{m}}]$')
+plt.ylabel("Counts")
+plt.tight_layout()
+plt.grid()
+plt.legend()
+plt.xlim(-0.45, 0.45)
+plt.ylim(0, 350)
+
+ax = plt.gca()
+ax.set_box_aspect(1)
+plt.savefig('../plots/projection_x_final.pdf', dpi=300, bbox_inches='tight')
+# %% Repeate above just considering proj_list[0:2]
+plt.plot(x_abel, p_abel * norm, 'k--', lw=1.5, label=r'$f_0$ (analytical)')
+for proj, label in proj_list[0:2]:
+    plt.step(x_centers, proj, where='mid', label=label) 
+plt.title("Projection on $x$-axis")
+plt.xlabel(r'$x\ [\sqrt{\mathrm{m}}]$')
+plt.ylabel("Counts")
+plt.tight_layout()
+#plt.grid()
+plt.legend()
+plt.xlim(-0.45, 0.45)
+plt.ylim(0, 350)
+
+ax = plt.gca()
+ax.set_box_aspect(1)
+plt.savefig('../plots/projection_x_final_rotation.pdf', dpi=300, bbox_inches='tight')
+
+# %% plot weights as a scatter plot in (Ix, theta) space
+Ix_values = np.array([tori[i].Ix for i in range(x_tori_number)])
+
+Ix_grid    = np.repeat(Ix_values[:, np.newaxis], angular_points_number-1, axis=1)
+theta_grid = np.tile(np.linspace(0, 2*np.pi, angular_points_number-1), (x_tori_number, 1))
+
+log_w = np.log(weights.flatten())
+finite_mask = np.isfinite(log_w)
+vmin, vmax = log_w[finite_mask].min(), log_w[finite_mask].max()
+
+fig, ax = plt.subplots()
+sc = ax.scatter(Ix_grid.flatten(), theta_grid.flatten(), c=log_w, vmin=vmin, vmax=vmax, s=1)
+ax.set_xlabel(r'$I_x$ [m]')
+ax.set_ylabel(r'$\theta_x$')
+ax.set_xlim(Ix_values[0], Ix_values[-2])
+ax.set_ylim(0, 2*np.pi)
+ax.set_yticks([0, np.pi, 2*np.pi], [r'$0$', r'$\pi$', r'$2\pi$'])
+cbar = fig.colorbar(sc, ax=ax, location='bottom', pad=0.15, label='log10(weighted density) [arb. units]')
+cbar.set_ticks([vmin, vmax])
+cbar.set_ticklabels(['-1', '0'])
+plt.tight_layout()
+plt.savefig('../plots/weights_Ix_theta.pdf', dpi=300, bbox_inches='tight')
+# %%
+# Density as a function of action
+Ix_values = np.array([tori[i].Ix for i in range(x_tori_number)])
+
+density_action = weights.sum(axis=1)
+
+dI_1 = np.diff(np.concatenate([[0], Ix_values[:-1]], axis=0))
+dI_2 = np.diff(Ix_values)
+dI   = (dI_1 + dI_2) / 2
+Ix_mid = 0.5 * (Ix_values[:-1] + Ix_values[1:])
+density_per_dI = 0.5 * (density_action[:-1] + density_action[1:]) / dI
+
+# Normalise to a PDF (integral over I = 1)
+norm = np.trapezoid(density_per_dI, Ix_mid)
+density_per_dI = density_per_dI / norm
+I_max = annulus_outer**2/2
+# plot also a pdf constant in 0<Ix<I_max for reference
+uniform_pdf = np.where((Ix_mid >= 0) & (Ix_mid <= I_max), 1/I_max, 0)   
+fig, ax = plt.subplots()
+
+plt.plot(Ix_mid, uniform_pdf, 'g--', label='linear lattice')
+
+ax.plot(Ix_mid, density_per_dI, 'r.-', label='non-linear lattice')
+
+ax.set_xlabel(r' $I_x$  [m]')
+ax.set_ylabel(r'pdf$(I_x)$  [m$^{-1}$]')
+ax.grid(True, alpha=0.3)
+plt.xlim(0, Ix_values[-2])
+plt.legend()
+plt.tight_layout()
+plt.savefig('../plots/density_per_dI.pdf', dpi=300, bbox_inches='tight')
+# %%
+# ── Mesh construction ──────────────────────────────────────────────────────
+my_Q = []
+my_P = []
+
+for torus in tori:
+    Tx = np.linspace(0, 2*np.pi, angular_points_number)
+    Q_t = torus.X(Tx)
+    P_t = torus.PX(Tx)
+    my_Q.append(Q_t[:-1])
+    my_P.append(P_t[:-1])
+
+Q = np.reshape(my_Q, (x_tori_number, angular_points_number-1))
+P = np.reshape(my_P, (x_tori_number, angular_points_number-1))
+
+# ── Gaussian weights (density × cell area) ────────────────────────────────
+weights = np.zeros_like(Q)
+values  = np.zeros_like(Q)
+
+alpha =0.5
+for ii in range(1, x_tori_number):
+    for jj in range(angular_points_number-1):
+        #value = gaussian_2d(Q[ii, jj], P[ii, jj], sigma=0.11*alpha, truncation_sigma=3.0/alpha)
+        value = gaussian_2d(Q[ii, jj], P[ii, jj], sigma=0.055, truncation_sigma=6)
+        area  = area_quadrilateral(Q[ii-1, jj-1], P[ii-1, jj-1],
+                                   Q[ii-1, jj],   P[ii-1, jj],
+                                   Q[ii,   jj],   P[ii,   jj],
+                                   Q[ii,   jj-1], P[ii,   jj-1])
+        values[ii, jj]  = value
+        weights[ii, jj] = value * area
+
+# ── Plot ───────────────────────────────────────────────────────────────────
+from mpl_toolkits.axes_grid1 import make_axes_locatable
+
+fig, ax = plt.subplots(figsize=(6.4, 5.6))
+sc = ax.scatter(Q, P, c=weights, cmap='viridis', marker='o', s=.1,
+                vmin=weights.min(), vmax=weights.max())
+ax.set_xlim(-0.43, 0.43)
+ax.set_ylim(-0.43, 0.43)
+ax.set_aspect('equal')
+ax.set_box_aspect(1)
+ax.set_xlabel(r'$ x\ [\sqrt{\mathrm{m}}]$')
+ax.set_ylabel(r'$ p_x\ [\sqrt{\mathrm{m}}]$')
+
+average_weights = np.mean(weights, axis=1)
+average_weights = np.repeat(average_weights[:, np.newaxis], angular_points_number-1, axis=1)
+
+divider = make_axes_locatable(ax)
+cax = divider.append_axes('bottom', size='5%', pad=0.5)
+cbar = fig.colorbar(sc, cax=cax, orientation='horizontal',
+                    label='weighted density [arb.units]')
+cbar.set_ticks([weights.min(), weights.max()])
+cbar.set_ticklabels(['0', '1'])
+plt.tight_layout()
+plt.savefig('../plots/average_density_gaussian.pdf', dpi=300, bbox_inches='tight')
+# %%
+fig, ax = plt.subplots(figsize=(6.4, 5.6))
+ax.scatter(my_Q, my_P, c=average_weights, cmap='viridis',  marker='o',vmin=weights.min(), vmax=weights.max(), s=.1)
+# plt.title('After filamentation')
+plt.xlabel(r'$x\ [\sqrt{\mathrm{m}}]$');
+plt.ylabel(r'$p_x\  [\sqrt{\mathrm{m}}]$')
+ax = plt.gca()
+ax.set_xlim(-0.43, 0.43)
+ax.set_ylim(-0.43, 0.43)
+ax.set_aspect('equal')
+ax.set_box_aspect(1)
+divider = make_axes_locatable(ax)
+cax = divider.append_axes('bottom', size='5%', pad=0.5)
+cbar = fig.colorbar(sc, cax=cax, orientation='horizontal',
+                    label='weighted density [arb. units]')
+cbar.set_ticks([weights.min(), weights.max()])
+cbar.set_ticklabels(['0', '1'])
+plt.savefig('../plots/average_density_gaussian_filamented.pdf', dpi=300, bbox_inches='tight')
+# %%
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Example arrays
+# X, Y, W are 1D arrays of the same length
+# X = ...
+# Y = ...
+# W = ...
+
+# Bin definitions
+my_Q_aux = np.concatenate(Q)
+my_P_aux = np.concatenate(P)
+my_average_density_aux = np.concatenate(average_weights)
+
+steps = 150
+xbins = np.linspace(min(my_Q_aux), max(my_Q_aux), steps)
+ybins = np.linspace(min(my_P_aux), max(my_P_aux), steps)
+
+# Build 2D weighted histogram
+H, xedges, yedges = np.histogram2d(my_Q_aux, my_P_aux, bins=[xbins, ybins], weights=my_average_density_aux)
+
+# Projection on X: sum over Y bins
+projXX = H.sum(axis=1)
+
+# Projection on Y: sum over X bins
+projYY = H.sum(axis=0)
+
+# Plot projections
+
+#plt.step(xedges[:-1], projXX, where='mid')
+
+
+my_Q_aux = np.concatenate(Q)
+my_P_aux = np.concatenate(P)
+my_density_aux = np.concatenate(weights)
+xbins = np.linspace(-0.45, 0.45, steps)
+ybins = np.linspace(-0.45, 0.45, steps)
+
+# Build 2D weighted histogram
+H, xedges, yedges = np.histogram2d(my_Q_aux, my_P_aux, bins=[xbins, ybins], weights=my_density_aux)
+
+# Projection on X: sum over Y bins
+projX = H.sum(axis=1)
+
+# Projection on Y: sum over X bins
+projY = H.sum(axis=0)
+
+rotations = [
+    (0,           r'$f_\infty$ at $s_0$'),
+    (np.pi/4,     r'$f_\infty$ at $s_0$ and $\mu_x=\pi/4$ '),
+    (np.pi/2,     r'$f_\infty$ at $s_0$ and $\mu_x=\pi/2$ '),
+    (3*np.pi/4,   r'$f_\infty$ at $s_0$ and $\mu_x=3\pi/4$ '),
+]
+proj_list = []
+for theta, label in rotations:
+    QQ = Q*np.cos(theta) - P*np.sin(theta)
+    PP = Q*np.sin(theta) + P*np.cos(theta)
+    H, xedges, _ = np.histogram2d(np.concatenate(QQ), np.concatenate(PP),
+                                   bins=[xbins, ybins], weights=my_average_density_aux, density=True)
+    proj_list.append((H.sum(axis=1), label))
+
+
+# Plot projections
+x_centers = xedges[1:]
+# for proj, label in [proj_list[0], proj_list[3]]:
+#     plt.step(x_centers, np.log10(proj), where='mid', label=label)
+    
+# Abel transform of a uniform disk of radius annulus_outer
+R = annulus_outer
+x_abel = np.linspace(-R, R, 1000)
+p_abel = 2 * np.sqrt(np.maximum(R**2 - x_abel**2, 0))
+# Normalise to the same integral as the filamented projection
+norm = np.trapezoid(proj_list[0][0], x_centers) / np.trapezoid(p_abel, x_abel)
+#plt.plot(x_abel, p_abel * norm, 'k--', lw=1.5, label=r'Analytical $x$-projection (Abel transform)')
+
+# plt.title("Projection on X")
+# plt.xlabel(r'$x\ [\sqrt{\mathrm{m}}]$')
+# plt.ylabel("Weighted counts")
+
+# plt.tight_layout()
+# plt.grid()
+# plt.legend()
+
+# my_Q_aux = np.concatenate(Q)
+# my_P_aux = np.concatenate(P)
+my_density_aux = np.concatenate(weights)
+
+# steps = 150
+# xbins = np.linspace(min(my_Q_aux), max(my_Q_aux), steps)
+# ybins = np.linspace(min(my_P_aux), max(my_P_aux), steps)
+
+rotations = [
+    (0,           r'$f_\infty$ at $s_0$'),
+    (np.pi/4,     r'$f_\infty$ at $s_0$ and $\mu_x=\pi/4$ '),
+    (np.pi/2,     r'$f_\infty$ at $s_0$ and $\mu_x=\pi/2$ '),
+    (3*np.pi/4,   r'$f_\infty$ at $s_0$ and $\mu_x=3\pi/4$ '),
+]
+
+proj_list = []
+for theta, label in rotations:
+    QQ = Q*np.cos(theta) - P*np.sin(theta)
+    PP = Q*np.sin(theta) + P*np.cos(theta)
+    H, xedges, _ = np.histogram2d(np.concatenate(QQ), np.concatenate(PP),
+                                   bins=[xbins, ybins], weights=my_density_aux, density=True)
+    proj_list.append((H.sum(axis=1), label))
+
+x_centers = xedges[1:]
+for proj, label in proj_list[0:1]:
+    plt.step(x_centers, np.log10(proj), where='mid', label='$f_0$', color='k')
+
+proj_list = []
+for theta, label in rotations:
+    QQ = Q*np.cos(theta) - P*np.sin(theta)
+    PP = Q*np.sin(theta) + P*np.cos(theta)
+    H, xedges, _ = np.histogram2d(np.concatenate(QQ), np.concatenate(PP),
+                                   bins=[xbins, ybins], weights=my_average_density_aux, density=True)
+    proj_list.append((H.sum(axis=1), label))
+
+
+# Plot projections
+x_centers = xedges[1:]
+for proj, label in [proj_list[0], proj_list[3]]:
+    plt.step(x_centers, np.log10(proj), where='mid', label=label)
+
+plt.xlabel(r'$x\ [\sqrt{\mathrm{m}}]$')
+plt.ylabel("log10(Counts)")
+plt.title("Projection on $x$-axis")
+plt.tight_layout()
+# plt.grid()
+plt.legend()
+plt.xlim(-0.45, 0.45)
+ax = plt.gca()
+ax.set_box_aspect(1)
+plt.savefig('../plots/projection_x_final_gaussian.pdf', dpi=300, bbox_inches='tight')
+# %%
+# plot weights as a scatter plot in (Ix, theta) space
+Ix_values = np.array([tori[i].Ix for i in range(x_tori_number)])
+
+Ix_grid    = np.repeat(Ix_values[:, np.newaxis], angular_points_number-1, axis=1)
+theta_grid = np.tile(np.linspace(0, 2*np.pi, angular_points_number-1), (x_tori_number, 1))
+
+log_w = np.log(weights.flatten())
+finite_mask = np.isfinite(log_w)
+vmin, vmax = log_w[finite_mask].min(), log_w[finite_mask].max()
+
+sc = plt.scatter(Ix_grid.flatten(), theta_grid.flatten(), c=log_w, vmin=vmin, vmax=vmax, s=1)
+plt.xlabel(r'$I_x$ [m]')
+plt.ylabel(r'$\theta_x$')
+plt.xlim(Ix_values[0], Ix_values[-2])
+plt.ylim(0, 2*np.pi)
+plt.yticks([0, np.pi, 2*np.pi], [r'$0$', r'$\pi$', r'$2\pi$'])
+cbar = plt.colorbar(sc, label='log10(weighted density) [arb. units]',
+                    location='bottom', pad=0.15)
+cbar.set_ticks([vmin, vmax])
+cbar.set_ticklabels(['-1', '0'])
+plt.tight_layout()
+plt.savefig('../plots/weights_Ix_theta_gaussian.pdf', dpi=300, bbox_inches='tight')
+# %%
+# Density as a function of action
+Ix_values = np.array([tori[i].Ix for i in range(x_tori_number)])
+
+density_action = weights.sum(axis=1)
+
+dI_1 = np.diff(np.concatenate([[0], Ix_values[:-1]], axis=0))
+dI_2 = np.diff(Ix_values)
+dI   = (dI_1 + dI_2) / 2
+Ix_mid = 0.5 * (Ix_values[:-1] + Ix_values[1:])
+density_per_dI = 0.5 * (density_action[:-1] + density_action[1:]) / dI
+
+# Normalise to a PDF (integral over I = 1)
+norm = np.trapezoid(density_per_dI, Ix_mid)
+density_per_dI = density_per_dI / norm
+I_max = annulus_outer**2/2
+# plot also a pdf constant in 0<Ix<I_max for reference
+uniform_pdf = np.where((Ix_mid >= 0) & (Ix_mid <= I_max), 1/I_max, 0)   
+fig, ax = plt.subplots()
+
+#plt.plot(Ix_mid, uniform_pdf, 'g--', label='In the $I_x$ of the linear lattice')
+
+
+ax.set_xlabel(r' $I_x$  [m]')
+ax.set_ylabel(r'pdf$(I_x)$  [m$^{-1}$]')
+ax.grid(True, alpha=0.3)
+plt.xlim(0, Ix_values[-2])
+plt.legend()
+plt.tight_layout()
+# Plot a exp(-I/I0) for reference
+sigma = 0.055
+I0 = sigma**2
+sigma_max = 6*sigma
+I_max = sigma_max**2/2
+
+pdf_exp = (1/I0) * np.exp(-Ix_mid/I0)
+# put pdf_exp = 0 for Ix_mid > 0.01 to avoid plotting the tail
+pdf_exp = np.where(Ix_mid <= I_max, pdf_exp, 0)
+# Normalize pdf_exp to the same area as density_per_dI for Ix_mid < 0.01
+norm_exp = np.trapezoid(pdf_exp, Ix_mid)
+norm_density = np.trapezoid(density_per_dI, Ix_mid)
+pdf_exp = pdf_exp * (norm_density / norm_exp)
+plt.semilogy(Ix_mid, pdf_exp, 'g--', label=r'linear lattice')
+plt.semilogy(Ix_mid, density_per_dI, 'r.-', label='non-linear lattice')
+
+plt.legend()
+plt.savefig('../plots/density_per_dI_gaussian.pdf', dpi=300, bbox_inches='tight')
 # %%
