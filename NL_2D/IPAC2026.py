@@ -59,10 +59,23 @@ plt.ylim(-1, 1)
 plt.xticks([-1, -0.5, 0, 0.5, 1])
 plt.yticks([-1, -0.5, 0, 0.5, 1])
 plt.savefig('../plots/henon_map_only_first_500.pdf', dpi=300, bbox_inches='tight')
-# %%
-total_turns = 50000
-step = 500
-turn_ranges = [(s, s + step) for s in range(0, total_turns, step)]
+# %% KAM evolution
+
+# total_turns = 50000
+# step = 500
+# turn_ranges = [(s, s + step) for s in range(0, total_turns, step)]
+turn_ranges = [
+    (0, 500),
+    (500, 1000),
+    (1000, 1500),
+    (1500, 2000),
+    (2000, 2500),
+    (9500, 10000),
+    (19500, 20000),
+    (29500, 30000),
+    (39500, 40000),
+    (49500, 50000)
+]
 
 for start_turn, end_turn in turn_ranges:
     fig = plt.figure(figsize=(5, 5.5))
@@ -105,8 +118,8 @@ fig, ax = plt.subplots(figsize=(5, 5))
 for tracking in tracking_list[0:16]:
     ax.plot(tracking['x'][0:500], tracking['px'][0:500], '.', color='k', markersize=1)
 ax.set_aspect('equal', adjustable='box')
-ax.set_xlim(-0.5, 0.5)
-ax.set_ylim(-0.5, 0.5)
+ax.set_xlim(-0.43, 0.43)
+ax.set_ylim(-0.43, 0.43)
 ax.set_xlabel(r'$ x\ [\sqrt{\mathrm{m}}]$')
 ax.set_ylabel(r'$ p_x\ [\sqrt{\mathrm{m}}]$')
 plt.savefig('../plots/henon_map_zoom_nonresonant.pdf', dpi=300, bbox_inches='tight')
@@ -120,8 +133,8 @@ for tracking in tracking_list[0:16]:
 ax.fill(r * np.cos(theta), r * np.sin(theta), color='green', alpha=0.3, zorder=0)
 ax.plot(r * np.cos(theta), r * np.sin(theta), '-', color='green', linewidth=1)
 ax.set_aspect('equal', adjustable='box')
-ax.set_xlim(-0.5, 0.5)
-ax.set_ylim(-0.5, 0.5)
+ax.set_xlim(-0.43, 0.43)
+ax.set_ylim(-0.43, 0.43)
 ax.set_xlabel(r'$ x\ [\sqrt{\mathrm{m}}]$')
 ax.set_ylabel(r'$ p_x\ [\sqrt{\mathrm{m}}]$')
 plt.savefig('../plots/henon_map_zoom_nonresonant_circle.pdf', dpi=300, bbox_inches='tight')
@@ -250,7 +263,7 @@ plt.xticks([-0.5, 0, 0.5])
 plt.yticks([-0.5, 0, 0.5])
 plt.savefig('../plots/henon_map_zoom.pdf', dpi=300, bbox_inches='tight')
 # %% same as above but with the external tori in red and the internal tori in gray
-plt.figure(figsize=(5, 5))
+plt.figure(figsize=(3, 3))
 for tracking in tracking_list[0:14]:
     plt.plot(tracking['x'][0:200], tracking['px'][0:200], '.', color='gray', markersize=1)
 for tracking in tracking_list[14:15]:
