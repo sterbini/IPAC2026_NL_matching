@@ -275,8 +275,8 @@ plt.ylabel(r'$ p_x\ [\sqrt{\mathrm{m}}]$');
 plt.xlim(-0.43, 0.43)
 plt.ylim(-0.43, 0.43)
 # put ticks at 0 0.5, 1
-plt.xticks([-0.5, 0, 0.5])
-plt.yticks([-0.5, 0, 0.5])
+# plt.xticks([-0.5, 0, 0.5])
+# plt.yticks([-0.5, 0, 0.5])
 plt.savefig('../plots/henon_map_zoom_red_gray.pdf', dpi=300, bbox_inches='tight')
 
 # %%
@@ -336,6 +336,99 @@ for torus_idx in range(15):
     plt.tight_layout()
     plt.savefig(f'../plots/harmonic_analysis_torus{torus_idx:02d}.pdf', dpi=300, bbox_inches='tight')
     plt.close()
+
+# %% Only frequency content for torus 14
+fig, ax = plt.subplots(figsize=(3, 3))
+Qx = tracking_list[14]['Qx']
+Ax = np.abs(tracking_list[14]['Ax'])
+ax.semilogy(Qx, Ax, '.', color='k', ms=6, alpha=1)
+ymin = ax.get_ylim()[0]
+ax.vlines(Qx, ymin, Ax, colors='k', lw=0.5, alpha=0.5)
+ax.set_xlabel('frequency [1/turn]')
+ax.set_ylabel(r'$|A_n|\ [\sqrt{\mathrm{m}}]$')
+plt.tight_layout()
+# only xticks at -0.5, 0, 0.5
+plt.xticks([-0.5, 0, 0.5])
+plt.savefig('../plots/harmonic_spectrum_torus14.pdf', dpi=300, bbox_inches='tight')
+plt.show()
+
+# %% Only frequency content for torus 14 + annotation of the main harmonics
+fig, ax = plt.subplots(figsize=(3, 3))
+Qx = tracking_list[14]['Qx']
+Ax = np.abs(tracking_list[14]['Ax'])
+nx = tracking_list[14]['nx']
+ax.semilogy(Qx, Ax, '.', color='k', ms=6, alpha=1)
+ymin = ax.get_ylim()[0]
+ax.vlines(Qx, ymin, Ax, colors='k', lw=0.5, alpha=0.5)
+bbox_props = dict(boxstyle='round,pad=0.05', facecolor='white', alpha=0.7, edgecolor='none')
+for ii in range(len(Qx)):
+    n = nx[ii][0]
+    if np.abs(n) <= 26:
+        label = f'n={n}' if np.abs(n) < 3 else str(n)
+        if n not in {-2, -1, 0, 1, 2}:
+            x_offset = 0.02 if n > 0 else -0.02
+            ax.annotate(label,
+                        xy=(Qx[ii], Ax[ii]),
+                        xytext=(Qx[ii] + x_offset, Ax[ii]*1.2),
+                        textcoords='data',
+                        ha='center', va='bottom', fontsize=5.5, color='r', bbox=bbox_props)
+        else:
+            ax.annotate(label,
+                        xy=(Qx[ii], Ax[ii]),
+                        xytext=(0, 3), textcoords='offset points',
+                        ha='center', va='bottom', fontsize=6, color='r', bbox=bbox_props)
+ax.set_xlabel('frequency [1/turn]')
+ax.set_ylabel(r'$|A_n|\ [\sqrt{\mathrm{m}}]$')
+plt.xticks([-0.5, 0, 0.5])
+plt.tight_layout()
+plt.savefig('../plots/harmonic_spectrum_torus14_annotated.pdf', dpi=300, bbox_inches='tight')
+plt.show()
+
+# %% Form the spectrum to the torus
+Tx = np.linspace(0, 2 * np.pi, 30, endpoint=False)
+torus14 = tori[14]
+X  = torus14.X(Tx)
+PX = torus14.PX(Tx)
+
+fig, ax = plt.subplots(figsize=(3, 3))
+ax.fill(X, PX, color='C0', alpha=0.3)
+# Closed torus curve
+ax.plot(np.append(X, X[0]), np.append(PX, PX[0]), color='C0', lw=0.5)
+
+# Spokes from origin to each theta point (closes full 2pi)
+for xi, pxi in zip(X, PX):
+    ax.plot([0, xi], [0, pxi], color='r', lw=0.4, alpha=0.3)
+
+# Theta points on curve
+ax.plot(X, PX, '.', color='r', ms=3)
+
+# theta_x label inside the torus near the first spoke
+frac = 0.45
+ax.text( 0.1, -0.18, r'$\theta_x$', fontsize=8, ha='center', va='center', color='r')
+
+# Circular arrow spanning 3/2 pi (270 deg) inside torus — inverted direction (arrowhead at start)
+r_arr = np.min(np.sqrt(X**2 + PX**2)) * 0.65
+theta_arc = np.linspace(Tx[1], Tx[1] + 3 * np.pi / 2, 200)
+x_arc = r_arr * np.cos(theta_arc)
+px_arc = r_arr * np.sin(theta_arc)
+ax.plot(x_arc, px_arc, 'r-', lw=1.0)
+ax.annotate('', xy=(x_arc[0], px_arc[0]), xytext=(x_arc[4], px_arc[4]),
+            arrowprops=dict(arrowstyle='->', color='r', lw=1.0))
+
+# Ix formula on a single line — same color as area fill (C0)
+ax.text(0.05, 0.95,
+        r'$I_x = \frac{1}{2}\sum_n n|A_n|^2 = $' + f'${torus14.Ix:.4f}$ m',
+        transform=ax.transAxes, fontsize=7, va='top', ha='left', color='C0',
+        bbox=dict(boxstyle='round,pad=0.2', facecolor='white', alpha=0.8, edgecolor='none'))
+
+ax.plot(0, 0, 'k+', ms=5)
+ax.set_aspect('equal')
+ax.set_xlabel(r'$x\ [\sqrt{\mathrm{m}}]$')
+ax.set_ylabel(r'$p_x\ [\sqrt{\mathrm{m}}]$')
+plt.tight_layout()
+plt.savefig('../plots/torus14_area.pdf', dpi=300, bbox_inches='tight')
+plt.show()
+
 # %%
 # Harmonic content for all tori: pcolormesh on a common frequency grid
 n_tori_plot = 15
@@ -369,6 +462,7 @@ ax.set_xlabel('frequency [1/turn]')
 ax.set_ylabel(r'$I_x$ [m]')
 plt.tight_layout()
 plt.savefig('../plots/harmonic_map.pdf', dpi=300, bbox_inches='tight')
+plt.show()
 # %%
 # Reference dimension cell
 fig, ax = plt.subplots()
