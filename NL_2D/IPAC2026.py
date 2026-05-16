@@ -59,10 +59,12 @@ plt.ylim(-1, 1)
 plt.xticks([-1, -0.5, 0, 0.5, 1])
 plt.yticks([-1, -0.5, 0, 0.5, 1])
 plt.savefig('../plots/henon_map_only_first_500.pdf', dpi=300, bbox_inches='tight')
+plt.savefig('../plots/henon_map_only_first_500.png', dpi=300, bbox_inches='tight')
+
 # %% KAM evolution
 
-# total_turns = 50000
-# step = 500
+total_turns = 50000
+step = 500
 # turn_ranges = [(s, s + step) for s in range(0, total_turns, step)]
 turn_ranges = [
     (0, 500),
@@ -112,7 +114,7 @@ for start_turn, end_turn in turn_ranges:
     ax_bar.set_xlabel('Turns')
 
     plt.savefig(f'../plots/henon_map_only_last_{end_turn}_{start_turn}.pdf', dpi=300, bbox_inches='tight')
-    plt.show()
+    plt.savefig(f'../plots/henon_map_only_last_{end_turn}_{start_turn}.png', dpi=300, bbox_inches='tight')
 # %%
 fig, ax = plt.subplots(figsize=(5, 5))
 for tracking in tracking_list[0:16]:
@@ -123,6 +125,7 @@ ax.set_ylim(-0.43, 0.43)
 ax.set_xlabel(r'$ x\ [\sqrt{\mathrm{m}}]$')
 ax.set_ylabel(r'$ p_x\ [\sqrt{\mathrm{m}}]$')
 plt.savefig('../plots/henon_map_zoom_nonresonant.pdf', dpi=300, bbox_inches='tight')
+plt.savefig('../plots/henon_map_zoom_nonresonant.png', dpi=300, bbox_inches='tight')
 plt.show()
 # %%
 r = 0.33
@@ -138,6 +141,7 @@ ax.set_ylim(-0.43, 0.43)
 ax.set_xlabel(r'$ x\ [\sqrt{\mathrm{m}}]$')
 ax.set_ylabel(r'$ p_x\ [\sqrt{\mathrm{m}}]$')
 plt.savefig('../plots/henon_map_zoom_nonresonant_circle.pdf', dpi=300, bbox_inches='tight')
+plt.savefig('../plots/henon_map_zoom_nonresonant_circle.png', dpi=300, bbox_inches='tight')
 plt.show()
 # %%
 # =======================
