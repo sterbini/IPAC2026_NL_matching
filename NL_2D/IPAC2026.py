@@ -251,7 +251,8 @@ plt.yticks([-0.4, 0, 0.4])
 plt.xlim(-0.43, 0.43)
 plt.ylim(-0.43, 0.43)
 
-plt.savefig('../plots/henon_map_and_distribution.pdf', dpi=300, bbox_inches='tight')    
+plt.savefig('../plots/henon_map_and_distribution.pdf', dpi=300, bbox_inches='tight') 
+plt.savefig('../plots/henon_map_and_distribution.png', dpi=300, bbox_inches='tight')   
 # %% same as above but without the annulus
 plt.figure(figsize=(5, 5))
 for tracking in tracking_list[0:15]:
@@ -266,7 +267,7 @@ plt.ylim(-0.43, 0.43)
 plt.xticks([-0.5, 0, 0.5])
 plt.yticks([-0.5, 0, 0.5])
 plt.savefig('../plots/henon_map_zoom.pdf', dpi=300, bbox_inches='tight')
-
+plt.savefig('../plots/henon_map_zoom.png', dpi=300, bbox_inches='tight')
 # %% same as above but with the external tori in red and the internal tori in gray
 plt.figure(figsize=(3, 3))
 plt.rcParams.update({'font.size': 11})
@@ -285,7 +286,7 @@ plt.ylim(-0.43, 0.43)
 # plt.xticks([-0.5, 0, 0.5])
 # plt.yticks([-0.5, 0, 0.5])
 plt.savefig('../plots/henon_map_zoom_red_gray.pdf', dpi=300, bbox_inches='tight')
-
+plt.savefig('../plots/henon_map_zoom_red_gray.png', dpi=300, bbox_inches='tight')
 # %%
 # Plotting the harmonic analysis
 plt.rcParams.update({'font.size': 11})
@@ -342,6 +343,7 @@ for torus_idx in range(15):
 
     plt.tight_layout()
     plt.savefig(f'../plots/harmonic_analysis_torus{torus_idx:02d}.pdf', dpi=300, bbox_inches='tight')
+    plt.savefig(f'../plots/harmonic_analysis_torus{torus_idx:02d}.png', dpi=300, bbox_inches='tight')
     plt.close()
 
 # %% Only frequency content for torus 14
@@ -357,6 +359,7 @@ plt.tight_layout()
 # only xticks at -0.5, 0, 0.5
 plt.xticks([-0.5, 0, 0.5])
 plt.savefig('../plots/harmonic_spectrum_torus14.pdf', dpi=300, bbox_inches='tight')
+plt.savefig('../plots/harmonic_spectrum_torus14.png', dpi=300, bbox_inches='tight')
 plt.show()
 
 # %% Only frequency content for torus 14 + annotation of the main harmonics
@@ -389,6 +392,7 @@ ax.set_ylabel(r'$|A_n|\ [\sqrt{\mathrm{m}}]$')
 plt.xticks([-0.5, 0, 0.5])
 plt.tight_layout()
 plt.savefig('../plots/harmonic_spectrum_torus14_annotated.pdf', dpi=300, bbox_inches='tight')
+plt.savefig('../plots/harmonic_spectrum_torus14_annotated.png', dpi=300, bbox_inches='tight')
 plt.show()
 
 # %% From the spectrum to the torus
@@ -440,6 +444,7 @@ ax.set_xlabel(r'$x\ [\sqrt{\mathrm{m}}]$')
 ax.set_ylabel(r'$p_x\ [\sqrt{\mathrm{m}}]$')
 plt.tight_layout()
 plt.savefig('../plots/torus14_area.pdf', dpi=300, bbox_inches='tight')
+plt.savefig('../plots/torus14_area.png', dpi=300, bbox_inches='tight')
 plt.show()
 
 #%% plot the tracking result of the torus14 with the same size and axes limits as the previous plot
@@ -458,7 +463,7 @@ ax.set_xlabel(r'$ x\ [\sqrt{\mathrm{m}}]$')
 ax.set_ylabel(r'$ p_x\ [\sqrt{\mathrm{m}}]$');
 plt.tight_layout()
 plt.savefig('../plots/torus14_tracking.pdf', dpi=300, bbox_inches='tight')
-
+plt.savefig('../plots/torus14_tracking.png', dpi=300, bbox_inches='tight')
 # %%
 # Harmonic content for all tori: pcolormesh on a common frequency grid
 n_tori_plot = 15
@@ -503,6 +508,7 @@ for k in range(len(ref['Qx'])):
 
 plt.tight_layout()
 plt.savefig('../plots/harmonic_map.pdf', dpi=300, bbox_inches='tight')
+plt.savefig('../plots/harmonic_map.png', dpi=300, bbox_inches='tight')
 plt.show()
 
 
@@ -549,6 +555,7 @@ ax.indicate_inset_zoom(axins, edgecolor='black', lw=1.2)
 
 plt.tight_layout()
 plt.savefig('../plots/tori_approximation.pdf', dpi=600, bbox_inches='tight')
+plt.savefig('../plots/tori_approximation.png', dpi=600, bbox_inches='tight')
 # %%
 # Plotting the tori mesh NL
 #--------------------------------------------------
@@ -603,8 +610,8 @@ ax.set_box_aspect(1)
 ax.set_xlabel(r'$ x\ [\sqrt{\mathrm{m}}]$')
 ax.set_ylabel(r'$ p_x\ [\sqrt{\mathrm{m}}]$')
 plt.tight_layout()
-plt.savefig('../plots/tori_mesh.pdf', dpi=600, bbox_inches='tight')
-
+plt.savefig('../plots/tori_mesh.pdf', dpi=300, bbox_inches='tight')
+plt.savefig('../plots/tori_mesh.png', dpi=300, bbox_inches='tight')
 
 # %%
 # Tori mesh with highlighted ring between tori 12 and 13
@@ -635,8 +642,8 @@ ax.set_box_aspect(1)
 ax.set_xlabel(r'$ x\ [\sqrt{\mathrm{m}}]$')
 ax.set_ylabel(r'$ p_x\ [\sqrt{\mathrm{m}}]$')
 plt.tight_layout()
-plt.savefig('../plots/tori_mesh_highlight_ring12.pdf', dpi=600, bbox_inches='tight')
-
+plt.savefig('../plots/tori_mesh_highlight_ring12.pdf', dpi=300, bbox_inches='tight')
+plt.savefig('../plots/tori_mesh_highlight_ring12.png', dpi=300, bbox_inches='tight')
 # %% Tori mesh: sweep all sectors for highlight_ring=12
 # # Tori mesh: sweep all sectors for highlight_ring=12
 # highlight_ring = 12
@@ -826,7 +833,8 @@ plt.ylabel(r'$p_x\ [\sqrt{\mathrm{m}}]$');
 # plt.fill(x, y, color='orange', alpha=.1)
 plt.gca().set_aspect('equal')
 plt.savefig('../plots/tori_foliation_denser.pdf', dpi=300, bbox_inches='tight')
-# %%
+plt.savefig('../plots/tori_foliation_denser.png', dpi=300, bbox_inches='tight')
+
 # %%
 # Harmonic content for all tori: pcolormesh on a common frequency grid
 plt.figure(figsize=(6, 6))
@@ -872,6 +880,7 @@ ax.set_ylabel(r'$I_x$ [m]')
 
 plt.tight_layout()
 plt.savefig('../plots/harmonic_map.pdf', dpi=300, bbox_inches='tight')
+plt.savefig('../plots/harmonic_map.png', dpi=300, bbox_inches='tight')
 plt.show()
 # %%
 
@@ -918,6 +927,7 @@ y = np.concatenate([px_outer, px_inner])
 plt.fill(x, y, color='orange', alpha=.1)
 plt.gca().set_aspect('equal')
 plt.savefig('../plots/tori_foliation_denser_and_distribution.pdf', dpi=300, bbox_inches='tight')
+plt.savefig('../plots/tori_foliation_denser_and_distribution.png', dpi=300, bbox_inches='tight')
 plt.show()
 
 # %%
@@ -1124,6 +1134,7 @@ cbar.set_ticks([weights.min(), weights.max()])
 cbar.set_ticklabels(['0', '1'])
 plt.tight_layout()
 plt.savefig('../plots/average_density.pdf', dpi=300, bbox_inches='tight')
+plt.savefig('../plots/average_density.png', dpi=300, bbox_inches='tight')
 # %%
 fig, ax = plt.subplots(figsize=(6.4, 5.6))
 ax.scatter(my_Q, my_P, c=average_weights, cmap='viridis',  marker='o',vmin=weights.min(), vmax=weights.max(), s=.1)
@@ -1143,7 +1154,7 @@ cbar = fig.colorbar(sc, cax=cax, orientation='horizontal',
 cbar.set_ticks([weights.min(), weights.max()])
 cbar.set_ticklabels(['0', '1'])
 plt.savefig('../plots/average_density_filamented.pdf', dpi=300, bbox_inches='tight')
-
+plt.savefig('../plots/average_density_filamented.png', dpi=300, bbox_inches='tight')
 # %%
 
 import numpy as np
@@ -1242,6 +1253,7 @@ plt.ylim(0, 350)
 ax = plt.gca()
 ax.set_box_aspect(1)
 plt.savefig('../plots/projection_x_final.pdf', dpi=300, bbox_inches='tight')
+plt.savefig('../plots/projection_x_final.png', dpi=300, bbox_inches='tight')
 # %% Repeate above just considering proj_list[0:2]
 plt.plot(x_abel, p_abel * norm, 'k--', lw=1.5, label=r'$f_0$ (analytical)')
 for proj, label in proj_list[0:2]:
@@ -1258,6 +1270,7 @@ plt.ylim(0, 350)
 ax = plt.gca()
 ax.set_box_aspect(1)
 plt.savefig('../plots/projection_x_final_rotation.pdf', dpi=300, bbox_inches='tight')
+plt.savefig('../plots/projection_x_final_rotation.png', dpi=300, bbox_inches='tight')
 
 # %% plot weights as a scatter plot in (Ix, theta) space
 Ix_values = np.array([tori[i].Ix for i in range(x_tori_number)])
@@ -1281,6 +1294,7 @@ cbar.set_ticks([vmin, vmax])
 cbar.set_ticklabels(['-1', '0'])
 plt.tight_layout()
 plt.savefig('../plots/weights_Ix_theta.pdf', dpi=300, bbox_inches='tight')
+plt.savefig('../plots/weights_Ix_theta.png', dpi=300, bbox_inches='tight')
 # %%
 # Density as a function of action
 Ix_values = np.array([tori[i].Ix for i in range(x_tori_number)])
@@ -1312,6 +1326,7 @@ plt.xlim(0, Ix_values[-2])
 plt.legend()
 plt.tight_layout()
 plt.savefig('../plots/density_per_dI.pdf', dpi=300, bbox_inches='tight')
+plt.savefig('../plots/density_per_dI.png', dpi=300, bbox_inches='tight')
 # %%
 # ── Mesh construction ──────────────────────────────────────────────────────
 my_Q = []
@@ -1367,6 +1382,7 @@ cbar.set_ticks([weights.min(), weights.max()])
 cbar.set_ticklabels(['0', '1'])
 plt.tight_layout()
 plt.savefig('../plots/average_density_gaussian.pdf', dpi=300, bbox_inches='tight')
+plt.savefig('../plots/average_density_gaussian.png', dpi=300, bbox_inches='tight')
 # %%
 fig, ax = plt.subplots(figsize=(6.4, 5.6))
 ax.scatter(my_Q, my_P, c=average_weights, cmap='viridis',  marker='o',vmin=weights.min(), vmax=weights.max(), s=.1)
@@ -1385,6 +1401,7 @@ cbar = fig.colorbar(sc, cax=cax, orientation='horizontal',
 cbar.set_ticks([weights.min(), weights.max()])
 cbar.set_ticklabels(['0', '1'])
 plt.savefig('../plots/average_density_gaussian_filamented.pdf', dpi=300, bbox_inches='tight')
+plt.savefig('../plots/average_density_gaussian_filamented.png', dpi=300, bbox_inches='tight')
 # %%
 import numpy as np
 import matplotlib.pyplot as plt
@@ -1520,6 +1537,7 @@ plt.xlim(-0.45, 0.45)
 ax = plt.gca()
 ax.set_box_aspect(1)
 plt.savefig('../plots/projection_x_final_gaussian.pdf', dpi=300, bbox_inches='tight')
+plt.savefig('../plots/projection_x_final_gaussian.png', dpi=300, bbox_inches='tight')
 # %%
 # plot weights as a scatter plot in (Ix, theta) space
 Ix_values = np.array([tori[i].Ix for i in range(x_tori_number)])
@@ -1543,6 +1561,7 @@ cbar.set_ticks([vmin, vmax])
 cbar.set_ticklabels(['-1', '0'])
 plt.tight_layout()
 plt.savefig('../plots/weights_Ix_theta_gaussian.pdf', dpi=300, bbox_inches='tight')
+plt.savefig('../plots/weights_Ix_theta_gaussian.png', dpi=300, bbox_inches='tight')
 # %%
 # Density as a function of action
 Ix_values = np.array([tori[i].Ix for i in range(x_tori_number)])
@@ -1590,4 +1609,5 @@ plt.semilogy(Ix_mid, density_per_dI, 'r.-', label='non-linear lattice')
 
 plt.legend()
 plt.savefig('../plots/density_per_dI_gaussian.pdf', dpi=300, bbox_inches='tight')
+plt.savefig('../plots/density_per_dI_gaussian.png', dpi=300, bbox_inches='tight')
 # %%
